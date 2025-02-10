@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 263 85% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 263 85% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    cursor: default;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Proper cursor styles for interactive elements */
+  button,
+  a,
+  [role="button"],
+  .cursor-pointer,
+  [data-state],
+  [data-radix-collection-item],
+  .tabs-trigger,
+  select,
+  option {
+    cursor: pointer !important;
+  }
+
+  /* Text cursor only for text inputs and search fields */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  textarea,
+  [contenteditable="true"],
+  .pac-container .pac-item,
+  .address-input {
+    cursor: text !important;
+  }
+
+  /* Prevent text cursor on headings and non-editable text */
+  h1, h2, h3, h4, h5, h6, p, span, div:not([contenteditable="true"]) {
+    cursor: default !important;
+  }
+
+  .address-input {
+    cursor: text !important;
+  }
+
+  /* Interactive elements cursor */
+  [role="tab"],
+  button,
+  a,
+  .card {
+    cursor: pointer !important;
+    user-select: none !important;
+  }
+
+  /* Style for Google Places Autocomplete dropdown */
+  .pac-container {
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+
+  .pac-item {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-top: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+
+  .pac-item:hover {
+    background-color: hsl(var(--accent));
+  }
+
+  .pac-item-query {
+    color: hsl(var(--foreground));
+  }
+
+  /* Ensure text in content areas is selectable but doesn't show text cursor by default */
+  p, h1, h2, h3, h4, h5, h6, span, div {
+    user-select: text;
+    cursor: default !important;
+  }
+
+  /* Remove text cursor from containers */
+  header, section, main, article, aside {
+    cursor: default !important;
+  }
+
+  /* Prevent text selection on interactive elements */
+  .text-5xl,
+  .text-xl,
+  .card,
+  .tabs-list,
+  .tabs-content {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+.bg-grid-white {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+}
