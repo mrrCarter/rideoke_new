@@ -67,7 +67,7 @@ export function AddressInput({ value, onChange, placeholder, className }: Addres
             pacContainer.style.borderRadius = '0.5rem';
             pacContainer.style.marginTop = '4px';
             pacContainer.style.padding = '0.5rem';
-            pacContainer.style.zIndex = '50';
+            pacContainer.style.zIndex = '5000'; // Ensure it's above everything else in the modal
 
             // Style items
             const items = pacContainer.querySelectorAll('.pac-item');

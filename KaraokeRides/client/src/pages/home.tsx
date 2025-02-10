@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -162,16 +162,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <motion.div
+                {/* Removed Motion from Around Card Temporarily */}
+                {/* <motion.div
                   initial={{ scale: 0.95, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-                >
+                > */}
                   <Card className="w-full shadow-2xl bg-card/50 backdrop-blur-sm border-primary/10 hover:border-primary/20 transition-all duration-300">
                     <CardContent className="p-6 relative overflow-hidden">
+                      {/* Temporarily remove absolute positioning and background effects
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-500/10 to-transparent animate-pulse" />
                       <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 via-transparent to-transparent" />
                       <div className="absolute inset-0 bg-gradient-radial from-primary/5 to-transparent" />
+                      */}
 
                       <Tabs value={tripType} onValueChange={(v) => setTripType(v as TripType)} className="mb-4">
                         <TabsList className="w-full">
@@ -539,7 +542,7 @@ export default function Home() {
                       </Tabs>
                     </CardContent>
                   </Card>
-                </motion.div>
+                {/* </motion.div> */}
               </div>
             </div>
           </header>

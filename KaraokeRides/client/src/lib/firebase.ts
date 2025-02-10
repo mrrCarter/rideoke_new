@@ -6,7 +6,7 @@ import { getAnalytics } from "firebase/analytics"; // Import getAnalytics if you
 import * as dotenv from 'dotenv';
 
 // Load environment variables
-dotenv.config({ path: '../../.env' });
+// dotenv.config({ path: '../../.env' });
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,

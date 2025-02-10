@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+// src/pages/booking.jsx
+import { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { type Vehicle } from "@shared/schema";
@@ -115,6 +116,14 @@ export default function Booking() {
     setPickup(editedPickup);
     setDropoff(editedDropoff);
     setEditDialogOpen(false);
+  };
+
+  const handleEditedPickupChange = (value: string) => {
+    setEditedPickup(value);
+  };
+
+  const handleEditedDropoffChange = (value: string) => {
+    setEditedDropoff(value);
   };
 
   if (isLoading) {
@@ -245,7 +254,7 @@ export default function Booking() {
                             <label className="text-sm font-medium">From</label>
                             <AddressInput
                               value={editedPickup}
-                              onChange={setEditedPickup}
+                              onChange={handleEditedPickupChange}
                               placeholder="Enter pickup location"
                               className="mt-1"
                             />
@@ -254,7 +263,7 @@ export default function Booking() {
                             <label className="text-sm font-medium">To</label>
                             <AddressInput
                               value={editedDropoff}
-                              onChange={setEditedDropoff}
+                              onChange={handleEditedDropoffChange}
                               placeholder="Enter dropoff location"
                               className="mt-1"
                             />
