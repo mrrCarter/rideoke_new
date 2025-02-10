@@ -1,34 +1,45 @@
-import { type Vehicle, type InsertVehicle, type Booking, type InsertBooking } from "@shared/schema";
-import { vehicles, bookings } from "@shared/schema";
-import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { collection, getDocs, getDoc, addDoc, doc } from 'firebase/firestore';
+import { config } from './config';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import type { Vehicle, Booking } from '@shared/schema';
 
-export interface IStorage {
-  getVehicles(): Promise<Vehicle[]>;
-  getVehicle(id: number): Promise<Vehicle | undefined>;
-  createBooking(booking: InsertBooking): Promise<Booking>;
-  getBooking(id: number): Promise<Booking | undefined>;
-}
+const app = initializeApp(config.firebase);
+const db = getFirestore(app);
 
-export class DatabaseStorage implements IStorage {
+class FirebaseStorage {
   async getVehicles(): Promise<Vehicle[]> {
-    return await db.select().from(vehicles);
+    const querySnapshot = await getDocs(collection(db, 'vehicles'));
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Vehicle));
   }
 
-  async getVehicle(id: number): Promise<Vehicle | undefined> {
-    const [vehicle] = await db.select().from(vehicles).where(eq(vehicles.id, id));
-    return vehicle;
+  async getVehicle(id: string): Promise<Vehicle | null> {
+    const docRef = doc(db, 'vehicles', id);
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } as Vehicle : null;
   }
 
-  async createBooking(booking: InsertBooking): Promise<Booking> {
-    const [newBooking] = await db.insert(bookings).values(booking).returning();
-    return newBooking;
+  async createBooking(booking: Omit<Booking, 'id'>): Promise<Booking> {
+    const docRef = await addDoc(collection(db, 'bookings'), booking);
+    return { id: docRef.id, ...booking };
   }
 
-  async getBooking(id: number): Promise<Booking | undefined> {
-    const [booking] = await db.select().from(bookings).where(eq(bookings.id, id));
-    return booking;
+  async getBooking(id: string): Promise<Booking | null> {
+    const docRef = doc(db, 'bookings', id);
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } as Booking : null;
+  }
+
+  async getBookings(): Promise<Booking[]> {
+    const querySnapshot = await getDocs(collection(db, 'bookings'));
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Booking));
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new FirebaseStorage();

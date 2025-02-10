@@ -20,4 +20,12 @@ export default defineConfig({
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
   },
+  envDir: path.resolve(__dirname), // Point to root directory
+  define: {
+    'import.meta.env': JSON.stringify(process.env)
+  },
+  server: {
+    host: true,
+    port: 5000
+  }
 });

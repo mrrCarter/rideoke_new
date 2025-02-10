@@ -1,40 +1,35 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
+import express, { type Express } from 'express';
+import { bookingSchema } from "@shared/schema";
 import { storage } from "./storage";
-import { insertBookingSchema } from "@shared/schema";
+import { type Server } from "http";
+import { createServer } from "http";
 
 export function registerRoutes(app: Express): Server {
-  app.get("/api/vehicles", async (_req, res) => {
-    const vehicles = await storage.getVehicles();
-    res.json(vehicles);
-  });
+  const router = express.Router();
 
-  app.get("/api/vehicles/:id", async (req, res) => {
-    const vehicle = await storage.getVehicle(parseInt(req.params.id));
-    if (!vehicle) {
-      return res.status(404).json({ message: "Vehicle not found" });
-    }
-    res.json(vehicle);
-  });
-
-  app.post("/api/bookings", async (req, res) => {
+  // Example: Get all bookings
+  router.get('/api/bookings', async (req, res) => {
     try {
-      const bookingData = insertBookingSchema.parse(req.body);
-      const booking = await storage.createBooking(bookingData);
-      res.status(201).json(booking);
+      const bookings = await storage.getBookings();
+      res.json(bookings);
     } catch (error) {
-      res.status(400).json({ message: "Invalid booking data" });
+      console.error("Error getting bookings:", error);
+      res.status(500).json({ error: "Failed to get bookings" });
     }
   });
 
-  app.get("/api/bookings/:id", async (req, res) => {
-    const booking = await storage.getBooking(parseInt(req.params.id));
-    if (!booking) {
-      return res.status(404).json({ message: "Booking not found" });
+  // Example: Create a new booking
+  router.post('/api/bookings', async (req, res) => {
+    try {
+      const validatedBooking = bookingSchema.parse(req.body);
+      const newBooking = await storage.createBooking(validatedBooking);
+      res.status(201).json(newBooking);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      res.status(400).json({ error: "Invalid booking data" });
     }
-    res.json(booking);
   });
 
-  const httpServer = createServer(app);
-  return httpServer;
+  app.use(router);
+  return createServer(app);
 }
